@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class GradeManagementSystemApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(GradeManagementSystemApplication.class, args);
     }
 
