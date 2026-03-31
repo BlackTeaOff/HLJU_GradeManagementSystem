@@ -23,5 +23,10 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @ToString.Include
     @EqualsAndHashCode.Include
-    private Set<CourseStudent> course = new HashSet<>();
+    private Set<CourseStudent> courseStudents = new HashSet<>();
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private Set<TeacherCourse> teacherCourses = new HashSet<>();
 }

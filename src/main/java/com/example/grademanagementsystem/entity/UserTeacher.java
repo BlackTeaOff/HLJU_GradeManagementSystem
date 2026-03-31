@@ -21,6 +21,6 @@ public class UserTeacher extends UserBase {
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Include
-    @ToString
+    @ToString.Include
     private Set<TeacherCourse> teacherCourses = new HashSet<>();
 }

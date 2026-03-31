@@ -8,11 +8,8 @@ import java.util.Optional;
 
 @Repository
 public interface UserBaseRepository extends JpaRepository<UserBase, Integer> {
-    //通过id和名字查
     Optional<UserBase> findById(int id);
     Optional<UserBase> findByName(String name);
-    //改密码
-
 }
 
 //查看成绩  学生  findbyid/name  写在一还是写在多？
