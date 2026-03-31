@@ -1,4 +1,4 @@
 package com.example.grademanagementsystem.dto.requeset;
 
-public record UserDeletedRequestDTO(int id) {
+public record UserDeletedRequestDTO(int id, String password) {
 }
