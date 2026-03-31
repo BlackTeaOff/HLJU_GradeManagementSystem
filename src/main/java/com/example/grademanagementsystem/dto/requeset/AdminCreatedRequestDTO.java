@@ -1,8 +1,9 @@
 package com.example.grademanagementsystem.dto.requeset;
 
-public record UserCreatedRequestDTO(
+public record AdminCreatedRequestDTO(
         String name,
         String password,
         String role,
+        String level
 ) {
 }
