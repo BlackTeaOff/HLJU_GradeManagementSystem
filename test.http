@@ -1,0 +1,13 @@
+### 测试创建用户
+POST http://localhost:8080/user/create/
+Content-Type: application/json
+
+{
+  "name": "testUser",
+  "password": "password123",
+  "role": "student",
+  "enrollment_year": "2024",
+  "major": "Computer Science",
+  "student_group": "Software Engineering"
+}
+###

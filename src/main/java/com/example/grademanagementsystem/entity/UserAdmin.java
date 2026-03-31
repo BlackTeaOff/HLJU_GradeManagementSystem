@@ -9,6 +9,7 @@ import lombok.Data;
 @Entity
 @Table(name = "admin")
 public class UserAdmin extends UserBase {
+
     @Column
     private String level;
 }
