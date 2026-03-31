@@ -13,15 +13,20 @@ import java.util.Set;
 @Entity
 @Table(name = "course")
 public class Course {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private int course_id;
 
     @Column
+    @ToString.Include
     private String name;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @ToString.Include
-    @EqualsAndHashCode.Include
-    private Set<CourseStudent> course = new HashSet<>();
+    private Set<CourseStudent> courseStudents = new HashSet<>();
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<TeacherCourse> teacherCourses = new HashSet<>();
 }

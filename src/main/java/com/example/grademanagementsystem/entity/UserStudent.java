@@ -13,13 +13,19 @@ import java.util.Set;
 @Entity
 @Table(name = "student")
 public class UserStudent extends UserBase {
+
     @Column
+    @ToString.Include
     private String major;
+
+    @Column(name = "enrollment_year")
+    @ToString.Include
     private String year;
+
+    @Column(name = "student_group")
+    @ToString.Include
     private String group;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Include
-    @ToString.Include
     private Set<CourseStudent> courseStudents = new HashSet<>();
 }

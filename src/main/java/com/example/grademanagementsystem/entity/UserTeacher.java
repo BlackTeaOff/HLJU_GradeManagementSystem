@@ -16,11 +16,10 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
 public class UserTeacher extends UserBase {
+
     @Column
     private String department;
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Include
-    @ToString
     private Set<TeacherCourse> teacherCourses = new HashSet<>();
 }

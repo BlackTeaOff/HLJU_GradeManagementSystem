@@ -3,14 +3,20 @@ package com.example.grademanagementsystem.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "stu_cour_rel", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"student_id", "course_id"})
 })
 public class CourseStudent {//可序列接口？
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
+    @ToString.Include
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
