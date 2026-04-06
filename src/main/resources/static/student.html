@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生控制台</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">学生中心</a>
+            <div class="d-flex">
+                <span class="navbar-text me-3" id="userNameDisplay">欢迎！</span>
+                <button class="btn btn-outline-light btn-sm me-2" onclick="showChangePasswordModal()">修改密码</button>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">注销</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- 导航标签 -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="my-courses-tab" data-bs-toggle="tab" data-bs-target="#my-courses" type="button" role="tab">我的课程 & 成绩</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="select-course-tab" data-bs-toggle="tab" data-bs-target="#select-course" type="button" role="tab">选课大厅</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="my-info-tab" data-bs-toggle="tab" data-bs-target="#my-info" type="button" role="tab">个人信息</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <!-- 我的课程 & 成绩 -->
+            <div class="tab-pane fade show active p-3 bg-white border border-top-0" id="my-courses" role="tabpanel">
+                <table class="table table-striped table-hover mt-2">
+                    <thead>
+                        <tr>
+                            <th>课程ID</th>
+                            <th>课程名称</th>
+                            <th>我的成绩</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myCoursesTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 选课大厅 -->
+            <div class="tab-pane fade p-3 bg-white border border-top-0" id="select-course" role="tabpanel">
+                <table class="table table-striped table-hover mt-2">
+                    <thead>
+                        <tr>
+                            <th>课程ID</th>
+                            <th>课程名称</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allCoursesTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 个人信息 -->
+            <div class="tab-pane fade p-3 bg-white border border-top-0" id="my-info" role="tabpanel">
+                <div class="card shadow-sm col-md-6">
+                    <div class="card-body" id="infoContent">
+                        <p class="text-muted">加载中...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/student.js"></script>
+</body>
+</html>

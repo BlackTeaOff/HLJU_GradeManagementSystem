@@ -1,0 +1,167 @@
+document.addEventListener('DOMContentLoaded', async () => {
+    if (!getAuthToken()) {
+        window.location.href = '/index.html';
+        return;
+    }
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+        document.getElementById('userNameDisplay').textContent = `欢迎，${user.name || user.id}`;
+    }
+
+    await loadMyCoursesAndGrades();
+    await loadAllCoursesList();
+});
+
+function logout() {
+    clearAuth();
+}
+
+/**
+ * 加载我的课程和成绩
+ */
+async function loadMyCoursesAndGrades() {
+    try {
+        // 先获取所有的课程，再获取我的成绩列表
+        const [coursesRes, gradesRes] = await Promise.all([
+            fetchWithAuth('/students/my/courses'),
+            fetchWithAuth('/students/my/grades')
+        ]);
+
+        const coursesData = await coursesRes.json();
+        const gradesData = await gradesRes.json();
+
+        // 以 Map 的形式快速根据 courseId 找 Grade
+        const gradeMap = {};
+        if (gradesData.code === 200 && gradesData.data) {
+            gradesData.data.forEach(item => {
+                gradeMap[item.courseId] = item.grade;
+            });
+        }
+
+        const tbody = document.getElementById('myCoursesTableBody');
+        tbody.innerHTML = '';
+
+        if (coursesData.code === 200 && coursesData.data) {
+            coursesData.data.forEach(course => {
+                const tr = document.createElement('tr');
+                let myGrade = gradeMap[course.courseId] !== undefined ? gradeMap[course.courseId] : '暂无成绩';
+
+                tr.innerHTML = `
+                    <td>${course.courseId}</td>
+                    <td>${course.courseName || '-'}</td>
+                    <td><span class="badge bg-${myGrade === '暂无成绩' ? 'secondary' : 'success'}">${myGrade}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="dropCourse(${course.courseId})">退课</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            if(coursesData.data.length === 0){
+                 tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">暂无已选课程</td></tr>';
+            }
+        }
+    } catch (e) {
+        console.error('加载我的课程失败', e);
+    }
+}
+
+/**
+ * 加载选课大厅的所有课程
+ */
+async function loadAllCoursesList() {
+    try {
+        const res = await fetchWithAuth('/courses');
+        const data = await res.json();
+
+        const tbody = document.getElementById('allCoursesTableBody');
+        tbody.innerHTML = '';
+
+        if (data.code === 200 && data.data) {
+            data.data.forEach(course => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${course.courseId}</td>
+                    <td>${course.courseName || '-'}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="selectCourse(${course.courseId})">选课</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    } catch (e) {
+        console.error('加载课程大厅失败', e);
+    }
+}
+
+/**
+ * 退课
+ */
+async function dropCourse(courseId) {
+    if (!confirm('确定要退掉这门课吗？')) return;
+    try {
+        const res = await fetchWithAuth(`/students/courses/${courseId}/drop`, {
+            method: 'DELETE'
+        });
+        const data = await res.json();
+        if (data.code === 200) {
+            alert('退课成功！');
+            await loadMyCoursesAndGrades(); // 刷新表格
+            await loadAllCoursesList();
+        } else {
+            alert(data.message || '退课失败');
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+/**
+ * 选课
+ */
+async function selectCourse(courseId) {
+    try {
+        const res = await fetchWithAuth(`/students/courses/${courseId}/select`, {
+            method: 'POST'
+        });
+        const data = await res.json();
+        if (data.code === 200) {
+            alert('选课成功！');
+            await loadMyCoursesAndGrades(); // 同步刷新
+        } else {
+            alert(data.message || '选课失败');
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function loadMyProfile() {
+    try {
+        const res = await fetchWithAuth('/users/my/info');
+        const data = await res.json();
+        
+        const container = document.getElementById('infoContent');
+        if (data.code === 200 && data.data) {
+            const u = data.data;
+            container.innerHTML = `
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>学生ID：</strong> ${u.id || '-'}</li>
+                    <li class="list-group-item"><strong>姓名：</strong> ${u.name || '-'}</li>
+                    <li class="list-group-item"><strong>入学年份：</strong> ${u.year || '-'}</li>
+                    <li class="list-group-item"><strong>专业：</strong> ${u.major || '-'}</li>
+                    <li class="list-group-item"><strong>班级：</strong> ${u.group || '-'}</li>
+                </ul>
+            `;
+        } else {
+            container.innerHTML = '<p class="text-danger">加载失败...</p>';
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+document.getElementById('my-info-tab').addEventListener('shown.bs.tab', function () {
+    loadMyProfile();
+});
