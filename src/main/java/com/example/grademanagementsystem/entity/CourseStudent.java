@@ -8,7 +8,7 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "stu_cour_rel", uniqueConstraints = {
+@Table(name = "Course_Student", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"student_id", "course_id"})
 })
 public class CourseStudent {//可序列接口？
@@ -28,7 +28,6 @@ public class CourseStudent {//可序列接口？
     private Course course;
 
     @Column
-    private int grade;
+    private Integer grade; // 没有成绩就是null
 
-    //审计字段？
 }

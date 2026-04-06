@@ -13,8 +13,8 @@ import java.util.Set;
 @Table(name = "teacher")
 @Getter
 @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@ToString(callSuper = true, onlyExplicitlyIncluded = true) // 因为id在父类, 所以要能调用父类
 public class UserTeacher extends UserBase {
 
     @Column

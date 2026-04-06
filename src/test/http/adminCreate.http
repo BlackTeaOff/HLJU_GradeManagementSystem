@@ -1,0 +1,11 @@
+### 测试创建管理员
+POST http://localhost:8080/user/admin
+Content-Type: application/json
+
+{
+  "name": "testAdmin",
+  "password": "password123",
+  "role": "admin",
+  "level": "1"
+}
+###

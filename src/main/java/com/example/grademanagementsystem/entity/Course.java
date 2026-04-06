@@ -18,15 +18,16 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     @ToString.Include
-    private int course_id;
+    private int id;
 
-    @Column
+    @Column(nullable = false, unique = true)
     @ToString.Include
     private String name;
 
+    // 下面这两个只是为了级联操作, 否则可以直接删掉(删除课程时, 自动删除所有课程和其他的关联)
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<CourseStudent> courseStudents = new HashSet<>();
-
+    // 因为这个关联关系可以直接在对应的Repository里查到
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<TeacherCourse> teacherCourses = new HashSet<>();
 }

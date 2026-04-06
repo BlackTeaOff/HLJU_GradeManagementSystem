@@ -1,0 +1,11 @@
+### 测试创建老师
+POST http://localhost:8080/user/teacher
+Content-Type: application/json
+
+{
+  "name": "testTeacher",
+  "password": "password123",
+  "role": "teacher",
+  "department": "Computer Science"
+}
+###

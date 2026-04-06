@@ -1,29 +1,29 @@
 package com.example.grademanagementsystem.service;
 
-import com.example.grademanagementsystem.dto.requeset.CourseCreatedRequestDTO;
-import com.example.grademanagementsystem.dto.requeset.CourseDeletedRequestDTO;
-import com.example.grademanagementsystem.dto.requeset.UserDeletedRequestDTO;
+import com.example.grademanagementsystem.dto.request.CourseCreateRequestDTO;
+import com.example.grademanagementsystem.dto.request.CourseDeleteRequestDTO;
+import com.example.grademanagementsystem.dto.request.UserDeleteRequestDTO;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AdminServiceImpl implements AdminService{
     @Override
-    public void deleteUser(UserDeletedRequestDTO userDeletedRequestDTO) {
+    public void deleteUser(UserDeleteRequestDTO userDeleteRequestDTO) {
 
     }
 
     @Override
-    public void addCourse(CourseCreatedRequestDTO courseCreatedRequestDTO) {
+    public void addCourse(CourseCreateRequestDTO courseCreateRequestDTO) {
 
     }
 
     @Override
-    public void modifyCourse(CourseCreatedRequestDTO courseCreatedRequestDTO) {
+    public void modifyCourse(CourseCreateRequestDTO courseCreateRequestDTO) {
 
     }
 
     @Override
-    public void deleteCourse(CourseDeletedRequestDTO courseDeletedRequestDTO) {
+    public void deleteCourse(CourseDeleteRequestDTO courseDeleteRequestDTO) {
 
     }
 }

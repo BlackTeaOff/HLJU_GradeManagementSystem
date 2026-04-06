@@ -1,6 +1,6 @@
-package com.example.grademanagementsystem.dto.requeset;
+package com.example.grademanagementsystem.dto.request;
 
-public record StudentCreatedRequestDTO(
+public record StudentCreateRequestDTO(
         String name,
         String password,
         String role,

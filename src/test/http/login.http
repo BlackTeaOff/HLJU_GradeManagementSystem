@@ -1,0 +1,10 @@
+### 测试登录
+POST http://localhost:8080/user/login
+Content-Type: application/json
+
+{
+  "id": 2,
+  "password": "password123"
+}
+
+###

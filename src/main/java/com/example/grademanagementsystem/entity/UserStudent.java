@@ -8,8 +8,8 @@ import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@ToString(callSuper = true, onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "student")
 public class UserStudent extends UserBase {
@@ -27,5 +27,5 @@ public class UserStudent extends UserBase {
     private String group;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<CourseStudent> courseStudents = new HashSet<>();
+    private Set<CourseStudent> courseStudents = new HashSet<>(); // CascadeType.ALL级联操作(删除学生也会删除成绩)
 }
