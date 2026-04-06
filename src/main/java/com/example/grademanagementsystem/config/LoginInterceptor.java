@@ -49,9 +49,10 @@ public class LoginInterceptor implements HandlerInterceptor { // Spring的拦截
                         return reject(response, 403, "权限不足：仅学生可操作");
                     }
 
-                    // 5. 对用户进行增删操作，仅限管理员
-                    if (uri.startsWith("/api/v1/users/create") || uri.startsWith("/api/v1/users/delete")) {
-                        if (!"admin".equals(role)) {
+                    // 5. 对用户进行增删查改操作，仅限管理员
+                    if (uri.startsWith("/api/v1/users/create") || uri.startsWith("/api/v1/users/delete") || uri.startsWith("/api/v1/users/modify")) {
+                        // Users modification checking
+                        if (!uri.equals("/api/v1/users/modifyPassword") && !"admin".equals(role)) { // modifyPassword和上面的modify前缀相同
                             return reject(response, 403, "权限不足：仅管理员可进行用户管理");
                         }
                     }

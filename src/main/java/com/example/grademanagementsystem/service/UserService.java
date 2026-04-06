@@ -17,9 +17,11 @@ public interface UserService {
 
     String login(UserLoginDTO userLoginDTO);
 
-    void modifyPassword(int userId, PasswordModifyRequestDTO passwordModifyRequestDTO);
-
     void deleteUser(UserDeleteRequestDTO userDeleteRequestDTO);
+    
+    void modifyUser(UserModifyRequestDTO userModifyRequestDTO);
+
+    void modifyPassword(int userId, PasswordModifyRequestDTO passwordModifyRequestDTO);
 
     Object queryInfo(InfoQueryRequestDTO infoQueryRequestDTO);
 

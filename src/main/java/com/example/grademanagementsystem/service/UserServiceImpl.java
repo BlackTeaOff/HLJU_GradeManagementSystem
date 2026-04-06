@@ -115,15 +115,31 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(UserDeleteRequestDTO userDeleteRequestDTO) {
         Optional<UserBase> op = userBaseRepository.findById(userDeleteRequestDTO.id());
         if (op.isPresent()) {
-            if (op.get().getPassword().equals(userDeleteRequestDTO.password())) {
-                userBaseRepository.deleteById(op.get().getId()); // delete方法不需要写save
-                // 提示：恭喜你，注销成功！
-            } else {
-                throw new RuntimeException("密码错误");
-            }
-        } else { // 抛出异常：id不存在
+            userBaseRepository.deleteById(op.get().getId());
+        } else {
             throw new RuntimeException("该用户ID不存在");
         }
+    }
+
+    @Override
+    public void modifyUser(UserModifyRequestDTO dto) {
+        UserBase user = userBaseRepository.findById(dto.id())
+                .orElseThrow(() -> new RuntimeException("该用户ID不存在"));
+
+        if (dto.name() != null) user.setName(dto.name());
+        if (dto.password() != null && !dto.password().isEmpty()) user.setPassword(dto.password());
+
+        if (user instanceof UserStudent student) {
+            if (dto.major() != null) student.setMajor(dto.major());
+            if (dto.student_group() != null) student.setGroup(dto.student_group());
+            if (dto.enrollment_year() != null) student.setYear(dto.enrollment_year());
+        } else if (user instanceof UserTeacher teacher) {
+            if (dto.department() != null) teacher.setDepartment(dto.department());
+        } else if (user instanceof UserAdmin admin) {
+            if (dto.level() != null) admin.setLevel(dto.level());
+        }
+
+        userBaseRepository.save(user);
     }
 
     @Override

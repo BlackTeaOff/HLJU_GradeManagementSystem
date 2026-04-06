@@ -45,6 +45,12 @@ public class UserController {
         return Result.success();
     }
 
+    @PutMapping("/modify")
+    public Result<Void> modifyUser(@RequestBody UserModifyRequestDTO userModifyRequestDTO) {
+        userService.modifyUser(userModifyRequestDTO);
+        return Result.success();
+    }
+
     @PostMapping("/modifyPassword")
     public Result<Void> modifyPassword(@RequestBody PasswordModifyRequestDTO passwordModifyRequestDTO) {
         int userId = UserContext.getUserId();
