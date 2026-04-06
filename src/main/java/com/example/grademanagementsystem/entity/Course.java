@@ -20,7 +20,7 @@ public class Course {
     @ToString.Include
     private int id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @ToString.Include
     private String name;
 

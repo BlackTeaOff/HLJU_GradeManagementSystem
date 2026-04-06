@@ -1,6 +1,7 @@
 package com.example.grademanagementsystem.controller;
 
 import com.example.grademanagementsystem.common.Result;
+import com.example.grademanagementsystem.common.UserContext;
 import com.example.grademanagementsystem.dto.request.GradeInputRequestDTO;
 import com.example.grademanagementsystem.dto.request.TeacherCourseRequestDTO;
 import com.example.grademanagementsystem.dto.request.TeacherGradeQueryRequestDTO;
@@ -19,26 +20,30 @@ public class TeacherController {
     @Autowired
     TeacherService teacherService;
 
-    @GetMapping("{id}/{courseId}/grades")
-    public Result<List<TeacherGradeResponseDTO>> queryGrades(@PathVariable int id, @PathVariable int courseId) {
-        return Result.success(teacherService.queryGrades(new TeacherGradeQueryRequestDTO(id, courseId)));
+    @GetMapping("/{courseId}/grades")
+    public Result<List<TeacherGradeResponseDTO>> queryGrades(@PathVariable int courseId) {
+        int teacherId = UserContext.getUserId();
+        return Result.success(teacherService.queryGrades(new TeacherGradeQueryRequestDTO(teacherId, courseId)));
     }
 
     @PostMapping("/grades") // 录入成绩(创建用POST), 符合RESTful规范, 只用名词不用动词
     public Result<Void> inputGrade(@RequestBody GradeInputRequestDTO gradeInputRequestDTO) {
-        teacherService.inputGrade(gradeInputRequestDTO);
+        int teacherId = UserContext.getUserId();
+        teacherService.inputGrade(teacherId, gradeInputRequestDTO);
         return Result.success();
     }
 
     @PutMapping("/grades") // 修改成绩(更新用PUT), 根据前端的请求方式来确定是哪个
     public Result<Void> modifyGrade(@RequestBody GradeInputRequestDTO gradeInputRequestDTO) {
-        teacherService.modifyGrade(gradeInputRequestDTO);
+        int teacherId = UserContext.getUserId();
+        teacherService.modifyGrade(teacherId, gradeInputRequestDTO);
         return Result.success();
     }
 
     // 老师查看自己所教的课程
-    @GetMapping("/{id}/courses")
-    public Result<List<TeacherCourseResponseDTO>> queryCourses(@PathVariable int id) {
-        return Result.success(teacherService.queryCourses(new TeacherCourseRequestDTO(id)));
+    @GetMapping("/my/courses")
+    public Result<List<TeacherCourseResponseDTO>> queryCourses() {
+        int teacherId = UserContext.getUserId();
+        return Result.success(teacherService.queryCourses(new TeacherCourseRequestDTO(teacherId)));
     }
 }

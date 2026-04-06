@@ -1,6 +1,7 @@
 package com.example.grademanagementsystem.controller;
 
 import com.example.grademanagementsystem.common.Result;
+import com.example.grademanagementsystem.common.UserContext;
 import com.example.grademanagementsystem.dto.request.*;
 import com.example.grademanagementsystem.entity.UserBase;
 import com.example.grademanagementsystem.service.UserService;
@@ -46,13 +47,15 @@ public class UserController {
 
     @PostMapping("/modifyPassword")
     public Result<Void> modifyPassword(@RequestBody PasswordModifyRequestDTO passwordModifyRequestDTO) {
-        userService.modifyPassword(passwordModifyRequestDTO);
+        int userId = UserContext.getUserId();
+        userService.modifyPassword(userId, passwordModifyRequestDTO);
         return Result.success();
     }
 
     // 查询个人信息接口
-    @GetMapping("{id}/info")
-    public Result<Object> queryInfo(@PathVariable int id) { // json序列化关心对象的实际属性, 可以用Object
-        return Result.success(userService.queryInfo(new InfoQueryRequestDTO(id)));
+    @GetMapping("/my/info")
+    public Result<Object> queryInfo() { // json序列化关心对象的实际属性, 可以用Object
+        int userId = UserContext.getUserId();
+        return Result.success(userService.queryInfo(new InfoQueryRequestDTO(userId)));
     }
 }

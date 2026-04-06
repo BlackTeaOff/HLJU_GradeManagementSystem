@@ -17,7 +17,7 @@ public interface UserService {
 
     String login(UserLoginDTO userLoginDTO);
 
-    void modifyPassword(PasswordModifyRequestDTO passwordModifyRequestDTO);
+    void modifyPassword(int userId, PasswordModifyRequestDTO passwordModifyRequestDTO);
 
     void deleteUser(UserDeleteRequestDTO userDeleteRequestDTO);
 

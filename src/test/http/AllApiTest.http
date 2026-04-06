@@ -4,13 +4,15 @@
 # 获取所有系统用户列表 (包含老师、学生、管理员)
 GET http://localhost:8080/api/v1/admins/users
 Content-Type: application/json
+Authorization: token-admin-1
 
 ### ========================================
 ### 2. 课程管理接口测试 (Course API)
 ### ========================================
-# 创建一门课程 (传课程名以及任课老师的ID) (假设2和3是张老师和刘老师)
+# 创建一门课程 (传课程名以及任课老师的ID) (建课只能由admin完成)
 POST http://localhost:8080/api/v1/courses/create
 Content-Type: application/json
+Authorization: token-admin-1
 
 {
   "name": "高阶软件工程",
@@ -18,13 +20,15 @@ Content-Type: application/json
 }
 
 ###
-# 查询所有课程 (获取刚创建课程的 courseId, 用于下面的选课)
+# 查询所有课程 (获取刚创建课程的 courseId, 用于下面的选课，学生和老师也能看)
 GET http://localhost:8080/api/v1/courses
+Authorization: token-student-4
 
 ###
 # 修改课程信息
 PUT http://localhost:8080/api/v1/courses/modify
 Content-Type: application/json
+Authorization: token-admin-1
 
 {
   "id": 1,
@@ -35,11 +39,13 @@ Content-Type: application/json
 ###
 # 查询课程下的所有学生名单 (假设这里填入课程ID => 1)
 GET http://localhost:8080/api/v1/courses/1/students
+Authorization: token-student-4
 
 ###
 # 删除课程
 DELETE http://localhost:8080/api/v1/courses/delete
 Content-Type: application/json
+Authorization: token-admin-1
 
 {
   "id": 1
@@ -50,34 +56,39 @@ Content-Type: application/json
 ### 3. 学生端接口测试 (Student API)
 ### ========================================
 # 小明(学生ID 4) 选修 第1门课(课程ID 1)
-POST http://localhost:8080/api/v1/students/4/courses/1/select
+POST http://localhost:8080/api/v1/students/courses/1/select
+Authorization: token-student-4
 
 ###
 # 查看小明已选的所有课程
-GET http://localhost:8080/api/v1/students/4/courses
+GET http://localhost:8080/api/v1/students/my/courses
+Authorization: token-student-4
 
 ###
 # 查看小明的全部成绩
-GET http://localhost:8080/api/v1/students/4/grades
+GET http://localhost:8080/api/v1/students/my/grades
+Authorization: token-student-4
 
 ###
 # 小明 退课 (课程ID 1)
-DELETE http://localhost:8080/api/v1/students/4/courses/1/drop
+DELETE http://localhost:8080/api/v1/students/courses/1/drop
+Authorization: token-student-4
 
 
 ### ========================================
 ### 4. 教师端接口测试 (Teacher API)
 ### ========================================
 # 张老师(教师ID 2) 查看自己教的课程
-GET http://localhost:8080/api/v1/teachers/2/courses
+GET http://localhost:8080/api/v1/teachers/my/courses
+Authorization: token-teacher-2
 
 ###
 # 张老师给小明(学生ID 4) 的 第1门课打分(95分)
 POST http://localhost:8080/api/v1/teachers/grades
 Content-Type: application/json
+Authorization: token-teacher-2
 
 {
-  "teacherId": 2,
   "studentId": 4,
   "courseId": 1,
   "grade": 95
@@ -87,9 +98,9 @@ Content-Type: application/json
 # 张老师修改小明的成绩为100分
 PUT http://localhost:8080/api/v1/teachers/grades
 Content-Type: application/json
+Authorization: token-teacher-2
 
 {
-  "teacherId": 2,
   "studentId": 4,
   "courseId": 1,
   "grade": 100
@@ -97,12 +108,13 @@ Content-Type: application/json
 
 ###
 # 张老师查询 第1门课 所有登过的成绩
-GET http://localhost:8080/api/v1/teachers/2/1/grades
+GET http://localhost:8080/api/v1/teachers/1/grades
+Authorization: token-teacher-2
 
 
 ### ========================================
 ### 5. 用户通用接口测试 (User API)
 ### ========================================
 # 查询小明(ID:4)的个人信息
-GET http://localhost:8080/api/v1/users/4/info
-
+GET http://localhost:8080/api/v1/users/my/info
+Authorization: token-student-4

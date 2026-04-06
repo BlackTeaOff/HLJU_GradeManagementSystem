@@ -80,9 +80,9 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
-    public void inputGrade(GradeInputRequestDTO gradeInputRequestDTO) {
-        // 先检查老师是否教这门课
-        boolean isTeaching = teacherCourseRepository.existsByTeacher_IdAndCourse_Id(gradeInputRequestDTO.teacherId(), gradeInputRequestDTO.courseId());
+    public void inputGrade(int teacherId, GradeInputRequestDTO gradeInputRequestDTO) {
+        // 先检查该老师是否教这门课
+        boolean isTeaching = teacherCourseRepository.existsByTeacher_IdAndCourse_Id(teacherId, gradeInputRequestDTO.courseId());
         if (!isTeaching) {
             throw new RuntimeException("您未教授该课程，无权录入成绩！");
         }
@@ -99,9 +99,9 @@ public class TeacherServiceImpl implements TeacherService{
     }
 
     @Override
-    public void modifyGrade(GradeInputRequestDTO gradeInputRequestDTO) {
-        // 同样先检查老师权限
-        boolean isTeaching = teacherCourseRepository.existsByTeacher_IdAndCourse_Id(gradeInputRequestDTO.teacherId(), gradeInputRequestDTO.courseId());
+    public void modifyGrade(int teacherId, GradeInputRequestDTO gradeInputRequestDTO) {
+        // 先检查是否有权限修改
+        boolean isTeaching = teacherCourseRepository.existsByTeacher_IdAndCourse_Id(teacherId, gradeInputRequestDTO.courseId());
         if (!isTeaching) {
             throw new RuntimeException("您未教授该课程，无权修改成绩！");
         }

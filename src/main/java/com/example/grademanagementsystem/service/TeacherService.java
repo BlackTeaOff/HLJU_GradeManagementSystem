@@ -15,9 +15,9 @@ public interface TeacherService {
     // List<TeacherGradeResponseDTO> queryGrades(GradeQueryRequestDTO gradeQueryRequestDTO);
     List<TeacherGradeResponseDTO> queryGrades(TeacherGradeQueryRequestDTO teacherGradeQueryRequestDTO);
 
-    void inputGrade(GradeInputRequestDTO gradeInputRequestDTO);
+    void inputGrade(int teacherId, GradeInputRequestDTO gradeInputRequestDTO);
 
-    void modifyGrade(GradeInputRequestDTO gradeInputRequestDTO);
+    void modifyGrade(int teacherId, GradeInputRequestDTO gradeInputRequestDTO);
 
     List<TeacherCourseResponseDTO> queryCourses(TeacherCourseRequestDTO teacherCourseRequestDTO);
 }

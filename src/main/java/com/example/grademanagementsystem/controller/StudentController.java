@@ -1,6 +1,7 @@
 package com.example.grademanagementsystem.controller;
 
 import com.example.grademanagementsystem.common.Result;
+import com.example.grademanagementsystem.common.UserContext;
 import com.example.grademanagementsystem.dto.request.CourseDropRequestDTO;
 import com.example.grademanagementsystem.dto.request.CourseSelectRequestDTO;
 import com.example.grademanagementsystem.dto.request.StudentCourseRequestDTO;
@@ -19,25 +20,30 @@ public class StudentController {
     @Autowired
     StudentService studentService;
 
-    @GetMapping("/{id}/grades") // RESTful规范, 一个学生下的信息
-    public Result<List<StudentGradeResponseDTO>> queryGrades(@PathVariable int id) {
-        return Result.success(studentService.queryGrades(new StudentGradeQueryRequestDTO(id)));
+    // Token里包含id, 不需要传ID了
+    @GetMapping("/my/grades") // RESTful规范, 一个学生下的信息
+    public Result<List<StudentGradeResponseDTO>> queryGrades() {
+        int studentId = UserContext.getUserId(); // 从UserContext里直接拿
+        return Result.success(studentService.queryGrades(new StudentGradeQueryRequestDTO(studentId)));
     }
 
-    @PostMapping("{id}/courses/{courseId}/select")
-    public Result<Void> selectCourse(@PathVariable int id, @PathVariable int courseId) {
-        studentService.selectCourse(new CourseSelectRequestDTO(id, courseId));
+    @PostMapping("/courses/{courseId}/select")
+    public Result<Void> selectCourse(@PathVariable int courseId) {
+        int studentId = UserContext.getUserId();
+        studentService.selectCourse(new CourseSelectRequestDTO(studentId, courseId));
         return Result.success();
     }
 
-    @DeleteMapping("{id}/courses/{courseId}/drop")
-    public Result<Void> dropCourse(@PathVariable int id, @PathVariable int courseId) {
-        studentService.dropCourse(new CourseDropRequestDTO(id, courseId));
+    @DeleteMapping("/courses/{courseId}/drop")
+    public Result<Void> dropCourse(@PathVariable int courseId) {
+        int studentId = UserContext.getUserId();
+        studentService.dropCourse(new CourseDropRequestDTO(studentId, courseId));
         return Result.success();
     }
 
-    @GetMapping("/{id}/courses")
-    public Result<List<StudentCourseResponseDTO>> queryCourses(@PathVariable int id) {
-        return Result.success(studentService.queryCourses(new StudentCourseRequestDTO(id)));
+    @GetMapping("/my/courses")
+    public Result<List<StudentCourseResponseDTO>> queryCourses() {
+        int studentId = UserContext.getUserId();
+        return Result.success(studentService.queryCourses(new StudentCourseRequestDTO(studentId)));
     }
 }

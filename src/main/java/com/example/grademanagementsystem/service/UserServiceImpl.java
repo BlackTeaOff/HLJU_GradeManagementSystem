@@ -89,8 +89,18 @@ public class UserServiceImpl implements UserService {
         Optional<UserBase> op = userBaseRepository.findById(userLoginDTO.id());
         if (op.isPresent()) { // 因为数据库里可能没有该id的对象, 所以用optional, 可为空
             if (op.get().getPassword().equals(userLoginDTO.password())) {
-                // 1. 登录成功，生成并返回 Token（这里暂时用简单字符串模拟，后续可引入JWT库）
-                return "token-user-" + op.get().getId();
+                UserBase user = op.get();
+                // 判断具体角色
+                String role = "user";
+                if (user instanceof UserAdmin) {
+                    role = "admin";
+                } else if (user instanceof UserTeacher) {
+                    role = "teacher";
+                } else if (user instanceof UserStudent) {
+                    role = "student";
+                }
+                // 返回携带级别信息的 Token
+                return "token-" + role + "-" + user.getId();
             } else {
                 // 2. 密码错误
                 throw new RuntimeException("密码错误"); // 抛出的异常都交给ExceptionHandler处理
@@ -117,8 +127,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void modifyPassword(PasswordModifyRequestDTO passwordModifyRequestDTO) {
-        Optional<UserBase> op = userBaseRepository.findById(passwordModifyRequestDTO.id());
+    public void modifyPassword(int userId, PasswordModifyRequestDTO passwordModifyRequestDTO) {
+        Optional<UserBase> op = userBaseRepository.findById(userId);
         if (op.isPresent()) {
             if (op.get().getPassword().equals(passwordModifyRequestDTO.old_password())) {
                 op.get().setPassword(passwordModifyRequestDTO.new_password());
