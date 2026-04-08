@@ -94,6 +94,10 @@ public class TeacherServiceImpl implements TeacherService{
             throw new RuntimeException("成绩已录入，请使用修改成绩功能");
         }
         
+        if (gradeInputRequestDTO.grade() < 0 || gradeInputRequestDTO.grade() > 100) {
+            throw new RuntimeException("成绩必须在 0 到 100 之间！");
+        }
+
         courseStudent.setGrade(gradeInputRequestDTO.grade());
         courseStudentRepository.save(courseStudent);
     }
@@ -111,6 +115,10 @@ public class TeacherServiceImpl implements TeacherService{
 
         if (courseStudent.getGrade() == null) {
             throw new RuntimeException("成绩尚未录入，请先录入成绩");
+        }
+
+        if (gradeInputRequestDTO.grade() < 0 || gradeInputRequestDTO.grade() > 100) {
+            throw new RuntimeException("修改的成绩必须在 0 到 100 之间！");
         }
 
         courseStudent.setGrade(gradeInputRequestDTO.grade());
