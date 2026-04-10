@@ -37,8 +37,8 @@ public class StudentServiceImpl implements StudentService{
         // 创建一个空的返回列表(返回给Controller), 里面是课程和成绩(学生查看成绩)
         List<StudentGradeResponseDTO> result = new ArrayList<>();
 
+        // 因为查看成绩和查看课程在同一页面, 查看课程返回的信息有课程信息, 查看课程用查看成绩代替, 无成绩就是null
         for (CourseStudent cs : courseStudents) { // 遍历courseStudents数组里的每一条
-            if (cs.getGrade() != null) { // 如果有成绩就打包成dto
                 StudentGradeResponseDTO dto = new StudentGradeResponseDTO(
                         cs.getCourse().getId(),
                         cs.getCourse().getName(),
@@ -46,7 +46,6 @@ public class StudentServiceImpl implements StudentService{
                 );
                 result.add(dto); // 把这个dto放入要返回的dto列表里
             }
-        }
         return result;
     }
 

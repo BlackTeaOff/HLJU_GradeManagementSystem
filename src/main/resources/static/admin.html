@@ -37,7 +37,7 @@
             <div class="tab-pane fade show active" id="user-manage" role="tabpanel">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="m-0">系统用户列表</h5>
-                    <button class="btn btn-success btn-sm" onclick="showCreateUserModal()">+ 新建用户</button>
+                    <button class="btn btn-success btn-sm" onclick="openCreateUserModal()">+ 新建用户</button>
                 </div>
                 <table class="table table-striped table-hover align-middle">
                     <thead class="table-dark">
@@ -58,7 +58,7 @@
             <div class="tab-pane fade" id="course-manage" role="tabpanel">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="m-0">全校课程列表</h5>
-                    <button class="btn btn-primary btn-sm" onclick="showCreateCourseModal()">+ 新建课程</button>
+                    <button class="btn btn-primary btn-sm" onclick="openCreateCourseModal()">+ 新建课程</button>
                 </div>
                 <table class="table table-striped table-hover align-middle">
                     <thead class="table-dark">
@@ -99,51 +99,51 @@
               <form id="createUserForm">
                   <input type="hidden" id="editUserId">
                   <div class="mb-3">
-                      <label>角色类型</label>
-                      <select class="form-select" id="newUserRole" onchange="onRoleChange()">
+                      <label for="newUserRole">角色类型</label>
+                      <select class="form-select" id="newUserRole" onchange="roleChange()">
                           <option value="student">学生</option>
                           <option value="teacher">教师</option>
                           <option value="admin">管理员</option>
                       </select>
                   </div>
                   <div class="mb-3">
-                      <label>姓名</label>
+                      <label for="newUserName">姓名</label>
                       <input type="text" class="form-control" id="newUserName" required>
                   </div>
                   <div class="mb-3">
-                      <label>密码</label>
+                      <label for="newUserPass">密码</label>
                       <input type="text" class="form-control" id="newUserPass" required>
                   </div>
 
-                  <!-- 学生专属 -->
+                  <!-- 学生 -->
                   <div id="studentFields">
                       <div class="mb-3">
-                          <label>入学年份</label>
-                          <input type="text" class="form-control" id="stuYear" placeholder="2023">
+                          <label for="stuYear">入学年份</label>
+                          <input type="text" class="form-control" id="stuYear">
                       </div>
                       <div class="mb-3">
-                          <label>专业</label>
-                          <input type="text" class="form-control" id="stuMajor" placeholder="软件工程">
+                          <label for="stuMajor">专业</label>
+                          <input type="text" class="form-control" id="stuMajor">
                       </div>
                       <div class="mb-3">
-                          <label>班级</label>
-                          <input type="text" class="form-control" id="stuGroup" placeholder="1班">
+                          <label for="stuGroup">班级</label>
+                          <input type="text" class="form-control" id="stuGroup">
                       </div>
                   </div>
 
-                  <!-- 教师专属 -->
+                  <!-- 教师 -->
                   <div id="teacherFields" class="d-none">
                       <div class="mb-3">
-                          <label>所属学院</label>
-                          <input type="text" class="form-control" id="teacherDept" placeholder="计算机学院">
+                          <label for="teacherDept">所属学院</label>
+                          <input type="text" class="form-control" id="teacherDept">
                       </div>
                   </div>
 
-                  <!-- 管理员专属 -->
+                  <!-- 管理员 -->
                   <div id="adminFields" class="d-none">
                       <div class="mb-3">
-                          <label>管理等级</label>
-                          <input type="text" class="form-control" id="adminLevel" placeholder="LEVEL_1">
+                          <label for="adminLevel">管理等级</label>
+                          <input type="text" class="form-control" id="adminLevel">
                       </div>
                   </div>
 
@@ -166,11 +166,11 @@
               <form id="createCourseForm">
                   <input type="hidden" id="editCourseId">
                   <div class="mb-3">
-                      <label>课程名称</label>
+                      <label for="newCourseName">课程名称</label>
                       <input type="text" class="form-control" id="newCourseName" required>
                   </div>
                   <div class="mb-3">
-                      <label>教师ID列表 (逗号分隔)</label>
+                      <label for="newCourseTeacherIds">教师ID列表 (逗号分隔)</label>
                       <input type="text" class="form-control" id="newCourseTeacherIds" placeholder="例如: 2, 5">
                   </div>
                   <button type="button" class="btn btn-primary" onclick="submitCourse()">提交</button>
@@ -183,18 +183,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/api.js"></script>
     <script src="/js/admin.js"></script>
-    <script>
-        // 检查登录
-        if (!getAuthToken()) {
-            window.location.href = '/index.html';
-        }
-
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user) document.getElementById('userNameDisplay').textContent = `欢迎，管理员 ${user.name || user.id}`;
-
-        function logout() {
-            clearAuth();
-        }
-    </script>
 </body>
 </html>

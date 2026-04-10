@@ -28,55 +28,35 @@ function logout() {
  */
 async function loadMyCoursesAndGrades() {
     try {
-        // 先获取所有的课程，再获取我的成绩列表
-        // Promise all 并行执行多个异步请求
-        // await 等数据都得到后再继续向下执行
-        // 数组解构赋值, 按照顺序以此赋值
-        // fetch得到的是Promise对象, await是等Promise对象完成, 并取出他的结果
-        const [coursesRes, gradesRes] = await Promise.all([
-            fetchWithAuth('/students/my/courses'),
-            fetchWithAuth('/students/my/grades')
-        ]);
-
-        // .json也返回Promise对象
-        // .json提取body部分, 后端返回的数据, 拆掉HTTP响应的外包装
-        const coursesData = await coursesRes.json();
-        const gradesData = await gradesRes.json();
-
-        // 以 Map 的形式快速根据 courseId 找 Grade
-        // 节省搜索时间, O(1), 哈希
-        const gradeMap = {};
-        if (gradesData.code === 200 && gradesData.data) {
-            gradesData.data.forEach(item => {
-                gradeMap[item.courseId] = item.grade;
-            });
-        }
+        // 直接请求成绩接口获取已选课程及成绩信息
+        const res = await fetchWithAuth('/students/my/grades');
+        const data = await res.json();
 
         // 清空旧数据
         const tbody = document.getElementById('myCoursesTableBody');
         tbody.innerHTML = '';
 
         // 后端返回200(正常情况), 并且里面有数据
-        if (coursesData.code === 200 && coursesData.data) {
-            // 遍历每节课
-            coursesData.data.forEach(course => {
-                // 为每节课在html里创建一行
+        if (data.code === 200 && data.data) {
+            // 直接遍历返回的成绩列表
+            data.data.forEach(item => {
                 const tr = document.createElement('tr');
-                // 从Map里取出成绩, 如果没有成绩就写暂无成绩
-                let myGrade = gradeMap[course.courseId] !== undefined ? gradeMap[course.courseId] : '暂无成绩';
 
-                // 填充这一行里面的html信息, ``模板字符串, 里面可以放字符串, 也可以放参数, 会转成字符串
+                // 判断成绩是否为空 (可能是null或undefined)
+                let myGrade = (item.grade !== null && item.grade !== undefined) ? item.grade : '暂无成绩';
+
                 tr.innerHTML = `
-                    <td>${course.courseId}</td>
-                    <td>${course.courseName || '-'}</td>
+                    <td>${item.courseId}</td>
+                    <td>${item.courseName || '-'}</td>
                     <td><span class="badge bg-${myGrade === '暂无成绩' ? 'secondary' : 'success'}">${myGrade}</span></td>
                     <td>
-                        <button class="btn btn-sm btn-danger" onclick="dropCourse(${course.courseId})">退课</button>
+                        <button class="btn btn-sm btn-danger" onclick="dropCourse(${item.courseId})">退课</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
-            if(coursesData.data.length === 0){
+
+            if (data.data.length === 0) {
                  tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">暂无已选课程</td></tr>';
             }
         }
